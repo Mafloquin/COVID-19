@@ -30,22 +30,25 @@ N = 10000
 init_vals = 1 - 1/N, 1/N, 0, 0
 alpha = 1/periode_incubation #Inverse de la période d'incubation
 gamma = 1/periode_infection_mean
-rho = [1,0.8,0.5]
+rho = [1.0,0.9,0.8,0.7,0.6,0.5,0.4]
 
 plt.figure(0)
-plt.grid()
 
 #SIMULATION
 for counter, value in enumerate(rho):
+    plt.cla()
+    plt.ylim(0,30)
+    plt.grid()
     params = alpha, beta, gamma, value
     results = seir_model_with_soc_dist(init_vals, params, t)
     
-    text_legend_exposed = r'Exposed ($\rho$=' + str(value) + ')'
-    text_legend_infected = r'Infected ($\rho$=' + str(value) + ')'
+    text_legend_exposed = r'Exposé ($\rho$=' + str(value) + ')'
+    text_legend_infected = r'Infecté ($\rho$=' + str(value) + ')'
     couleur = np.random.rand(3,)
     plt.plot(np.arange(0,t_max+dt,dt), results[:,1] * 100,c=couleur,label=text_legend_exposed)
     plt.plot(np.arange(0,t_max+dt,dt), results[:,2] * 100,c=couleur,linestyle='--',label=text_legend_infected)
-    plt.xlabel('Days [-]')
-    plt.ylabel('Percentage Population [%]')
-    plt.title(r'COVID-19 SEIR Model with Social Distancing ($\alpha$=' + str(alpha) + r', $\beta$=' + str(beta) + r', $\gamma$=' + str(gamma) + ')')
+    plt.xlabel('Jours [-]')
+    plt.ylabel('Pourcentage de la population [%]')
+    plt.title(r'COVID-19, Modèle SEIR avec confinement ($\alpha$=' + str(alpha) + r', $\beta$=' + str(beta) + r', $\gamma$=' + str(gamma) + ')')
     plt.legend()
+    plt.savefig('rho=' + str(value) + '.jpg')
